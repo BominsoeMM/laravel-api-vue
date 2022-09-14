@@ -26,11 +26,20 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                  aria-expanded="false">
+                Product
+              </a>
+              <ul class="dropdown-menu">
+                <li><router-link class="dropdown-item" :to="{name:'product.create'}">Add Product</router-link></li>
+                <li><router-link class="dropdown-item" :to="{name: 'products'}">Product List</router-link></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                 aria-expanded="false">
                 {{ auth.name }}
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><router-link class="dropdown-item" to="/dashboard">Dashboard</router-link></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -59,6 +68,8 @@ export default {
   },
   methods: {
     logout() {
+      localStorage.removeItem('auth')
+      localStorage.removeItem('token')
       let headers = new Headers();
       headers.append("Authorization", "Bearer " + this.token);
       fetch(this.getUrl("/logout"), {
@@ -68,10 +79,9 @@ export default {
           .then(json => {
             if (json.success === true) {
               this.$store.dispatch('logout');
-              this.$router.push('/');
             }
           })
-
+          .finally(()=>this.$router.push('/login'))
     }
   },
 

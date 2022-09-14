@@ -1,6 +1,6 @@
 <template>
   <NavBar/>
-  <router-view/>
+  <router-view></router-view>
 </template>
 
 <style lang="scss">
@@ -10,7 +10,15 @@
 <script>
 import * as bootstrap from 'bootstrap';
 import NavBar from "@/components/NavBar";
+import axios from "axios";
 export default {
-  components: {NavBar}
+  components: {NavBar},
+  created() {
+    if (localStorage.getItem('auth') && localStorage.getItem('token')){
+      this.$store.dispatch('setAuth',JSON.parse(localStorage.getItem('auth')))
+      this.$store.dispatch('setToken',localStorage.getItem('token'))
+      axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem('token');
+    }
+  }
 }
 </script>
